@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import Header from '../components/Header';
-import ProductList from '../components/ProductList';
+import ProductList from "../components/ProductList";
+import Header from "../components/Header/Header";
+import { useState, useEffect } from 'react';
 
 export default function HomePage() {
     const [products, setProducts] = useState([]);
@@ -14,23 +14,28 @@ export default function HomePage() {
             .then(data => setProducts(data))
             .catch(error => {
                 console.error('Ошибка при получении продуктов:', error);
-                setProducts([]); // важно: чтобы не было undefined
+                setProducts([]);
             });
     }, []);
 
+    // === Новый метод ===
+    const handleDelete = (article) => {
+        setProducts(prev => prev.filter(p => p.article !== article));
+    };
+
+    // (если нужно — можешь также передать сюда onAddToCart)
     return (
         <>
             <Header />
             <main
                 style={{
-                    padding: '20px',
                     backgroundColor: '#1f1f1f',
                     fontFamily: 'Bahnschrift',
                     color: '#e9e9e9',
                     minHeight: '100vh'
                 }}
             >
-                <ProductList products={products} />
+                <ProductList products={products} onDelete={handleDelete} />
             </main>
         </>
     );

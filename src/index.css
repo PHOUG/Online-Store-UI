@@ -5,6 +5,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+::selection {
+  background: rgba(232, 49, 0, 0.4); /* Прозрачный оранжевый фон */
+  color: currentColor;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
