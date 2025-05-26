@@ -1,5 +1,5 @@
 import ProductList from "../components/ProductList";
-import Header from "../components/Header/Header";
+import Header from "../components/header/Header";
 import { useState, useEffect } from 'react';
 
 export default function HomePage() {
@@ -18,12 +18,10 @@ export default function HomePage() {
             });
     }, []);
 
-    // === Новый метод ===
     const handleDelete = (article) => {
         setProducts(prev => prev.filter(p => p.article !== article));
     };
 
-    // (если нужно — можешь также передать сюда onAddToCart)
     return (
         <>
             <Header />

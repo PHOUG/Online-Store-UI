@@ -1,0 +1,41 @@
+/* styles/addCard.css */
+.add-card {
+    background: transparent;
+    border: 1.5px solid #e9e9e9;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 410px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    color: #e9e9e9; /* задаёт цвет иконки и текста */
+}
+
+/* При наведении — увеличить и сменить цвет рамки/иконки/текста */
+.add-card:hover {
+    border-color: #E83100;
+    transform: scale(1.02);
+    color: #E83100;
+}
+
+/* При нажатии — уменьшить */
+.add-card:active {
+    transform: scale(0.98);
+}
+
+/* Иконка внутри будет наследовать цвет родителя */
+.add-card svg {
+    color: currentColor;
+}
+
+/* Текст внутри */
+.add-card-label {
+    margin-top: 10px;
+    font-family: Bahnschrift, sans-serif;
+    font-size: 14px;
+    color: currentColor;
+    transition: color 0.2s ease;
+}

@@ -74,6 +74,12 @@ export default function ProductCard({ product, onAddToCart, onDelete }) {
                 onMouseLeave={() => setIsHovered(false)}
                 onClick={() => setShowModal(true)}
                 style={cardStyle}
+                onMouseDown={e => {
+                    e.currentTarget.style.transform = 'scale(0.98)';
+                }}
+                onMouseUp={e => {
+                    e.currentTarget.style.transform = isHovered ? 'scale(1.02)' : 'scale(1)';
+                }}
             >
                 <div style={{ flexGrow: 1 }}>
                     <img
@@ -133,7 +139,7 @@ export default function ProductCard({ product, onAddToCart, onDelete }) {
                     }}
                     onMouseEnter={(e) => {
                         e.target.style.backgroundColor = '#e83100';
-                        e.target.style.color = '#fff';
+                        e.target.style.color = '#e9e9e9';
                     }}
                     onMouseLeave={(e) => {
                         e.target.style.backgroundColor = '#e9e9e9';

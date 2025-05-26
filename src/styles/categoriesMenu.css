@@ -1,0 +1,71 @@
+.categories-menu-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    transition: opacity 0.3s ease;
+}
+
+.categories-menu-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.categories-menu-sidebar {
+    position: fixed;
+    top: 60px;
+    left: -300px;
+    width: 300px;
+    height: calc(100vh - 60px);
+    background-color: #252525;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.categories-menu-sidebar ul {
+    list-style: none;   /* убирает точки */
+    margin: 0;          /* сбросит отступ сверху/снизу */
+    padding: 0;         /* сбросит отступ слева/справа */
+}
+
+.categories-menu-sidebar.open {
+    left: 0;
+}
+
+.category-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #1F1F1F;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+    color: #E9E9E9;
+}
+
+.category-item:hover {
+    color: #E83100;
+    transform: scale(1.02);
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.categories-menu-sidebar::-webkit-scrollbar-thumb {
+    background-color: #E83100;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    transition: opacity 0.3s ease;
+}
+
+/* ширина скроллбара */
+.categories-menu-sidebar::-webkit-scrollbar {
+    width: 3px;
+}
+
+
