@@ -1,0 +1,219 @@
+.product-card {
+    display: flex;
+    background-color: #252525;
+    padding: 16px;
+    border-radius: 12px;
+    height: 405px;
+    width: 250px;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-wrap: wrap;
+    font-family: Bahnschrift, sans-serif;
+    flex-direction: column;
+}
+
+.product-card.hovered {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.product-card-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card-image {
+    width: 100%;
+    height: 275px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 12px;
+    transition: opacity 0.3s;
+}
+
+.product-card-price {
+    font-size: 20px;
+    margin: 0 0 4px 0;
+}
+
+.product-card-brand-name {
+    margin: 0 0 4px 0;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.product-card-brand-name span {
+    color: #fff;
+}
+
+.product-card-rating {
+    font-size: 14px;
+    color: #e9e9e9;
+}
+
+.product-card-rating span {
+    color: #aaa;
+    margin-left: 8px;
+}
+
+.product-card-button {
+    margin-top: auto;
+    padding: 10px 16px;
+    background-color: #e9e9e9;
+    border: none;
+    border-radius: 8px;
+    color: #1f1f1f;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: start;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.product-card-icons {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.product-card-icon {
+    cursor: pointer;
+    transition: color 0.3s, transform 0.2s;
+}
+
+.product-card-button.full-width {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5em 1em;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.icon-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-button.full-width {
+    width: 100%;
+}
+
+.product-card-left {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.product-card-icons {
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    flex-shrink: 0;
+}
+
+.product-card-icons:hover {
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    flex-shrink: 0;
+}
+
+.product-card-button.full-width-wide {
+    font-family: Bahnschrift, sans-serif;
+    width: 100%;
+    padding: 0.6em 1em;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #E9E9E9;
+    color: #1F1F1F;
+    border: none;
+    border-radius: 12px;
+    box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+.product-card-button.full-width-wide:hover {
+    background-color: #E83100;
+    color: #E9E9E9;
+    transform: scale(1.02);
+}
+
+.product-card-button.full-width-wide:active {
+    transform: scale(0.99);
+}
+
+.product-card-icons {
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    flex-shrink: 0;
+}
+
+.icon-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding-left: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.3s, transform 0.2s;
+    color: #fff; /* цвет иконок */
+}
+
+.icon-button:hover {
+    color: #E83100; /* цвет при наведении, например красный */
+    transform: scale(1.1); /* легкое увеличение при наведении */
+}
+
+.product-card-left {
+    display: flex;
+}
+
+.product-card-info {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.product-card-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.product-card-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 12px;
+    align-items: flex-end;
+}
+
+.product-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.product-card-brand-name {
+    white-space: nowrap;         /* Запрет переноса строки */
+    overflow: hidden;            /* Обрезать содержимое, выходящее за пределы */
+    text-overflow: ellipsis;     /* Показывать многоточие вместо обрезанного текста */
+    max-width: 180px;             /* Ограничить ширину (можно подстроить под контейнер) */
+}
+
+

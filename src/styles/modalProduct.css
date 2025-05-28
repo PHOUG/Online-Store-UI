@@ -1,0 +1,161 @@
+/* modalProduct.css */
+
+.mp-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1500;
+    transition: opacity 0.3s ease;
+}
+
+.mp-window {
+    display: flex;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 960px;
+    width: 90%;
+    height: 600px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.mp-left {
+    position: relative;
+    width: 50%;
+    background: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.mp-image {
+    max-width: 100%;
+    max-height: 110%;
+    object-fit: cover;
+}
+
+.mp-no-image {
+    color: #777;
+    font-size: 18px;
+    text-align: center;
+}
+
+.mp-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(232, 49, 0, 0.5);
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s, color 0.3s, scale 0.2s;
+}
+
+.mp-nav:hover {
+    background: rgba(232, 49, 0, 0.9);
+}
+
+.mp-nav:active {
+    background: rgba(232, 49, 0, 0.9);
+    scale: 0.95;
+}
+
+.mp-prev {
+    left: 10px;
+}
+
+.mp-next {
+    right: 10px;
+}
+
+.mp-right {
+    width: 50%;
+    padding: 24px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.mp-info {
+    color: #333;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.mp-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #111;
+}
+
+.mp-actions {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    gap: 12px;
+}
+
+.mp-icon-btn {
+    background: #eee;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.mp-icon-btn:hover {
+    background: #ddd;
+}
+
+.mp-confirm-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.mp-confirm-box {
+    background: #fff;
+    padding: 24px 32px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.mp-confirm-buttons {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.mp-confirm-yes,
+.mp-confirm-no {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+}
+
+.mp-confirm-yes {
+    background-color: #e53935;
+    color: #fff;
+}
+
+.mp-confirm-no {
+    background-color: #ccc;
+    color: #333;
+}

@@ -1,9 +1,11 @@
 import ProductList from "../components/ProductList";
 import Header from "../components/header/Header";
+import { useCategories } from "../components/CategoriesContext";
 import { useState, useEffect } from 'react';
 
 export default function HomePage() {
     const [products, setProducts] = useState([]);
+
 
     useEffect(() => {
         fetch('http://localhost:8080/products/search/all')

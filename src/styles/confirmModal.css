@@ -1,0 +1,94 @@
+/* src/common/confirmModal.css */
+
+.confirm-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.confirm-modal-content {
+    background-color: #E9E9E9;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 90%;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.2s ease;
+    height: 130px;
+}
+
+.confirm-modal-message {
+    font-size: 19px;
+}
+
+.confirm-modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.confirm-modal-button-confirm {
+    font-family: Bahnschrift, sans-serif;
+    font-size: 16px;
+    padding: 8px 16px;
+    background-color: #1F1F1F;
+    color: #E9E9E9;
+    border: none;
+    width: 100px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.confirm-modal-button-confirm:hover {
+    background-color: #E83100;
+    color: #1F1F1F;
+    transform: scale(1.02);
+}
+
+.confirm-modal-button-confirm:active {
+    transform: scale(0.98);
+}
+
+.confirm-modal-button-cancel {
+    font-size: 16px;
+    font-family: Bahnschrift, sans-serif;
+    padding: 8px 16px;
+    background-color: transparent;
+    border: 1px solid #1F1F1F;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100px;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, border 0.2s ease;
+}
+
+.confirm-modal-button-cancel:hover {
+    color: #E83100;
+    border: 1px solid #E83100;
+    transform: scale(1.02);
+}
+
+.confirm-modal-button-cancel:active {
+    transform: scale(0.98);
+}
+
+/* Optional fadeIn animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
