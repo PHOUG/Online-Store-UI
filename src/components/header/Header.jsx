@@ -7,12 +7,14 @@ import HeaderLogo from './HeaderLogo';
 import HeaderButton from './HeaderButton';
 import CategoriesMenu from '../categoriesMenu/CategoriesMenu';
 import SearchBar from './HeaderSearchBar';
+import { useSelectedCategories } from '../../contexts/SelectedCategoriesContext';
 
 export default function Header() {
     const [isHoveredLogin, setIsHoveredLogin] = useState(false);
     const [isHoveredCategories, setIsHoveredCategories] = useState(false);
     const [isHoveredCart, setIsHoveredCart] = useState(false);
     const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+    const { setSelected } = useSelectedCategories();
 
     const categoriesButtonRef = useRef(null);
     const navigate = useNavigate();
@@ -56,6 +58,7 @@ export default function Header() {
                 isOpen={isCategoriesOpen}
                 onClose={() => setIsCategoriesOpen(false)}
                 buttonRef={categoriesButtonRef}
+                onSelectionChange={setSelected}
             />
         </>
     );

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ChevronLeft, ChevronRight, Trash2, PencilLine } from 'lucide-react';
 import ModalProductEdit from './ModalProductEdit';
 import '../styles/modalProduct.css';
-import { useCategories } from './CategoriesContext';
+import { useCategories } from '../contexts/CategoriesContext';
 
 export default function ModalProduct({
                                          product,

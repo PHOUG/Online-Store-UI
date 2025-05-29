@@ -1,8 +1,8 @@
 // src/components/products/ProductList.jsx
 import { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
-import AddCard from '../addProduct/AddCard';
-import ModalAdd from '../addProduct/ModalAdd';
+import AddCard from './addProduct/AddCard';
+import ModalAdd from './addProduct/ModalAdd';
 import '../styles/productList.css';
 
 export default function ProductList({ products, onDelete, onCreate }) {

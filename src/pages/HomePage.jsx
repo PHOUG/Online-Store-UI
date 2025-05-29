@@ -1,11 +1,12 @@
-import ProductList from "../components/ProductList";
-import Header from "../components/header/Header";
-import { useCategories } from "../components/CategoriesContext";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import Header from '../components/header/Header';
+import ProductList from '../components/ProductList';
+import { useSelectedCategories } from '../contexts/SelectedCategoriesContext';
+import {fetchProducts} from "../services/api";
 
 export default function HomePage() {
     const [products, setProducts] = useState([]);
-
+    const { selected } = useSelectedCategories();
 
     useEffect(() => {
         fetch('http://localhost:8080/products/search/all')
@@ -20,8 +21,20 @@ export default function HomePage() {
             });
     }, []);
 
-    const handleDelete = (article) => {
+    // Фильтрация: оставляем только товары, у которых есть все выбранные категории
+    const filteredProducts =
+        selected.length > 0
+            ? products.filter(product =>
+                selected.every(catId => product.categoryIds.includes(catId))
+            )
+            : products;
+
+    const handleDelete = article => {
         setProducts(prev => prev.filter(p => p.article !== article));
+    };
+
+    const handleCreate = async (newProduct) => {
+        await fetchProducts();
     };
 
     return (
@@ -32,10 +45,14 @@ export default function HomePage() {
                     backgroundColor: '#1f1f1f',
                     fontFamily: 'Bahnschrift',
                     color: '#e9e9e9',
-                    minHeight: '100vh'
+                    minHeight: '100vh',
                 }}
             >
-                <ProductList products={products} onDelete={handleDelete} />
+                <ProductList
+                    products={filteredProducts}
+                    onCreate={handleCreate}
+                    onDelete={handleDelete}
+                />
             </main>
         </>
     );

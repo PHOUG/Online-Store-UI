@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, PencilLine } from 'lucide-react';
 import ModalProduct from './ModalProduct';
-import ModalAdd from '../addProduct/ModalAdd';
+import ModalAdd from './addProduct/ModalAdd';
 import ConfirmModal from './ConfirmModal';
 import '../styles/productCard.css';  // импорт стилей
 

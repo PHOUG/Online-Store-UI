@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
-import '../styles/addCard.css';
+import '../../styles/addCard.css';
 
 export default function AddCard({ onClick }) {
     const [isHovered, setIsHovered] = useState(false);
