@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../../styles/modalAdd.css';
 
-export default function ModalAdd({ isOpen, onClose, onCreate }) {
+export default function ModalAdd({ isOpen, onClose, onSave }) {
     const MAX_IMAGES = 5;
 
-    // Состояние формы
     const [form, setForm] = useState({
         name: '',
         price: '',
@@ -17,37 +16,32 @@ export default function ModalAdd({ isOpen, onClose, onCreate }) {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [imageFiles, setImageFiles] = useState([]);
 
-    // Валидация
     const [errors, setErrors] = useState({});
     const [shake, setShake] = useState({});
 
-    // Refs для фокуса
     const refs = {
-        name: useRef(null),
-        price: useRef(null),
-        description: useRef(null),
-        brand: useRef(null),
-        size: useRef(null),
-        color: useRef(null),
-        categories: useRef(null),
-        images: useRef(null)
+        name: useRef(),
+        price: useRef(),
+        description: useRef(),
+        brand: useRef(),
+        size: useRef(),
+        color: useRef(),
+        categories: useRef(),
+        images: useRef()
     };
 
-    // Загрузка категорий
     useEffect(() => {
         fetch('http://localhost:8080/category/search/all')
-            .then(res => res.json())
-            .then(data => setCategories(data))
+            .then(r => r.json())
+            .then(setCategories)
             .catch(console.error);
     }, []);
 
-    // Блокировка прокрутки
     useEffect(() => {
         document.body.style.overflow = isOpen ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
     }, [isOpen]);
 
-    // Сброс формы при открытии
     useEffect(() => {
         if (isOpen) {
             setForm({ name: '', price: '', description: '', brand: '', size: '', color: '' });
@@ -61,37 +55,36 @@ export default function ModalAdd({ isOpen, onClose, onCreate }) {
 
     if (!isOpen) return null;
 
-    // Изменение полей
     const handleChange = e => {
         const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
-        if (value.trim()) setErrors(prev => ({ ...prev, [name]: false }));
+        setForm(f => ({ ...f, [name]: value }));
+        if (value.trim()) setErrors(e => ({ ...e, [name]: false }));
     };
 
     const handleCategory = e => {
         const { value, checked } = e.target;
-        setSelectedCategories(prev => checked ? [...prev, value] : prev.filter(v => v !== value));
-        if (checked || selectedCategories.length > 1) setErrors(prev => ({ ...prev, categoryIds: false }));
+        setSelectedCategories(s => checked ? [...s, value] : s.filter(x => x !== value));
+        if (checked) setErrors(e => ({ ...e, categoryIds: false }));
     };
 
     const handleImageChange = e => {
-        let files = Array.from(e.target.files);
-        if (files.length > MAX_IMAGES) files = files.slice(0, MAX_IMAGES);
+        let files = Array.from(e.target.files).slice(0, MAX_IMAGES);
         setImageFiles(files);
-        setErrors(prev => ({ ...prev, images: files.length === 0 }));
-        const dt = new DataTransfer(); files.forEach(f => dt.items.add(f));
+        setErrors(e => ({ ...e, images: files.length === 0 }));
+        const dt = new DataTransfer();
+        files.forEach(f => dt.items.add(f));
         if (refs.images.current) refs.images.current.files = dt.files;
     };
 
-    const removeImage = idx => {
-        const files = imageFiles.filter((_, i) => i !== idx);
+    const removeImage = i => {
+        const files = imageFiles.filter((_, idx) => idx !== i);
         setImageFiles(files);
-        setErrors(prev => ({ ...prev, images: files.length === 0 }));
-        const dt = new DataTransfer(); files.forEach(f => dt.items.add(f));
+        setErrors(e => ({ ...e, images: files.length === 0 }));
+        const dt = new DataTransfer();
+        files.forEach(f => dt.items.add(f));
         if (refs.images.current) refs.images.current.files = dt.files;
     };
 
-    // Валидация
     const validate = () => {
         const errs = {};
         ['name','price','description','brand','size','color'].forEach(f => {
@@ -107,31 +100,32 @@ export default function ModalAdd({ isOpen, onClose, onCreate }) {
     };
 
     const focusFirstError = () => {
-        const order = ['name','price','description','brand','size','color'];
-        for (let f of order) if (errors[f]) { refs[f].current.focus(); return; }
+        for (let f of ['name','price','description','brand','size','color']) {
+            if (errors[f]) { refs[f].current.focus(); return; }
+        }
         if (errors.categoryIds) { refs.categories.current.focus(); return; }
         if (errors.images) { refs.images.current.focus(); }
     };
 
-    // Сабмит без отлова ошибок
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
         if (!validate()) { focusFirstError(); return; }
 
         const data = new FormData();
         Object.entries(form).forEach(([k,v]) => data.append(k, v));
         selectedCategories.forEach(id => data.append('categoryIds', id));
-        imageFiles.forEach(file => data.append('images', file));
+        imageFiles.forEach(f => data.append('images', f));
 
-        fetch('http://localhost:8080/products/create', {
-            method: 'POST',
-            body: data
-        });
-        onCreate && onCreate();
-        onClose();
+        const res = await fetch('http://localhost:8080/products/create', { method: 'POST', body: data });
+        if (res.status === 201) {
+            onSave();
+        } else {
+            console.error('Create failed:', await res.text());
+            alert('Не удалось создать товар');
+        }
     };
 
-    const cls = key => `${errors[key] ? 'invalid' : ''} ${shake[key] ? 'shake' : ''}`.trim();
+    const cls = key => `${errors[key]?'invalid':''} ${shake[key]?'shake':''}`.trim();
 
     return (
         <>
@@ -139,21 +133,92 @@ export default function ModalAdd({ isOpen, onClose, onCreate }) {
             <div className="modal-add">
                 <h2>Добавить новый товар</h2>
                 <form onSubmit={handleSubmit}>
-                    {['name','price','description','brand','size','color'].map(key => (
-                        <div className="modal-field" key={key}>
-                            <label>{key.charAt(0).toUpperCase() + key.slice(1)}</label>
-                            <input
-                                ref={refs[key]}
-                                name={key}
-                                type={key === 'price' ? 'number' : 'text'}
-                                value={form[key]}
-                                className={cls(key)}
-                                onChange={handleChange}
-                                placeholder={key === 'price' ? '123.45' : ''}
-                            />
-                        </div>
-                    ))}
+                    {/* Название */}
+                    <div className="modal-field">
+                        <label>Название товара</label>
+                        <input
+                            ref={refs.name}
+                            name="name"
+                            type="text"
+                            value={form.name}
+                            className={cls('name')}
+                            onChange={handleChange}
+                            placeholder="Введите название товара"
+                        />
+                    </div>
 
+                    {/* Цена */}
+                    <div className="modal-field">
+                        <label>Цена, BYN</label>
+                        <input
+                            ref={refs.price}
+                            name="price"
+                            type="number"
+                            min="0.01"
+                            step="0.01"
+                            value={form.price}
+                            className={cls('price')}
+                            onChange={handleChange}
+                            placeholder="123.45"
+                        />
+                    </div>
+
+                    {/* Описание */}
+                    <div className="modal-field">
+                        <label>Описание</label>
+                        <input
+                            ref={refs.description}
+                            name="description"
+                            value={form.description}
+                            className={cls('description')}
+                            onChange={handleChange}
+                            placeholder="Введите описание товара"
+                        />
+                    </div>
+
+                    {/* Бренд */}
+                    <div className="modal-field">
+                        <label>Бренд</label>
+                        <input
+                            ref={refs.brand}
+                            name="brand"
+                            type="text"
+                            value={form.brand}
+                            className={cls('brand')}
+                            onChange={handleChange}
+                            placeholder="Введите бренд товара"
+                        />
+                    </div>
+
+                    {/* Размер */}
+                    <div className="modal-field">
+                        <label>Размер</label>
+                        <input
+                            ref={refs.size}
+                            name="size"
+                            type="text"
+                            value={form.size}
+                            className={cls('size')}
+                            onChange={handleChange}
+                            placeholder="Введите размер (например, M)"
+                        />
+                    </div>
+
+                    {/* Цвет */}
+                    <div className="modal-field">
+                        <label>Цвет</label>
+                        <input
+                            ref={refs.color}
+                            name="color"
+                            type="text"
+                            value={form.color}
+                            className={cls('color')}
+                            onChange={handleChange}
+                            placeholder="Введите цвет (например, Black)"
+                        />
+                    </div>
+
+                    {/* Категории */}
                     <div className={`checkbox-group ${cls('categoryIds')}`}>
                         <label>Категории</label>
                         <div ref={refs.categories} className="category-scroll">
@@ -171,6 +236,7 @@ export default function ModalAdd({ isOpen, onClose, onCreate }) {
                         </div>
                     </div>
 
+                    {/* Изображения */}
                     <div className="modal-field">
                         <label>Изображения</label>
                         <input
@@ -185,15 +251,16 @@ export default function ModalAdd({ isOpen, onClose, onCreate }) {
 
                     {imageFiles.length > 0 && (
                         <div className="image-previews">
-                            {imageFiles.map((file, i) => (
+                            {imageFiles.map((f, i) => (
                                 <div key={i} className="preview-item">
-                                    <img src={URL.createObjectURL(file)} alt="preview" className="preview-img" />
+                                    <img src={URL.createObjectURL(f)} alt="preview" className="preview-img" />
                                     <button type="button" onClick={() => removeImage(i)} className="remove-btn">&times;</button>
                                 </div>
                             ))}
                         </div>
                     )}
 
+                    {/* Кнопки */}
                     <div className="modal-buttons">
                         <button type="submit" className="modal-save">Сохранить</button>
                         <button type="button" className="modal-cancel" onClick={onClose}>Отмена</button>

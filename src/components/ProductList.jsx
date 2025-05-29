@@ -1,65 +1,65 @@
-// src/components/products/ProductList.jsx
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ProductCard from './ProductCard';
 import AddCard from './addProduct/AddCard';
 import ModalAdd from './addProduct/ModalAdd';
+import ModalUpdate from './updateProduct/ModalUpdate';
 import '../styles/productList.css';
 
-export default function ProductList({ products, onDelete, onCreate }) {
-    const [productsState, setProductsState] = useState([]);
+export default function ProductList({ products, onDelete, onCreate, onUpdate }) {
     const [isAddOpen, setIsAddOpen] = useState(false);
+    const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
-    useEffect(() => {
-        setProductsState(products || []);
-    }, [products]);
+    const openAdd = () => setIsAddOpen(true);
+    const closeAdd = () => setIsAddOpen(false);
 
-    const handleSave = (newProduct) => {
-        onCreate(newProduct);
-        setIsAddOpen(false);
+    const openUpdate = (product) => {
+        setSelectedProduct(product);
+        setIsUpdateOpen(true);
     };
 
-    if (!productsState.length) {
-        return (
-            <>
-                {/* Модальное окно */}
-                <ModalAdd
-                    isOpen={isAddOpen}
-                    onClose={() => setIsAddOpen(false)}
-                    onSave={handleSave}
-                />
+    const closeUpdate = () => {
+        setIsUpdateOpen(false);
+        // Очистим выбранный товар, чтобы поля точно обнулились
+        setSelectedProduct(null);
+    };
 
-                {/* Сетка товаров + AddCard */}
-                <div className="product-list">
+    const handleSaveAdd = async () => {
+        await onCreate(); // Обновление списка после добавления
+        closeAdd();
+    };
 
-                    {/* Вставляем AddCard после всех ProductCard */}
-                    <AddCard onClick={() => setIsAddOpen(true)} />
-                </div>
-            </>
-        );
-    }
+    const handleSaveUpdate = async (updatedProduct) => {
+        await onUpdate(updatedProduct);
+        closeUpdate();
+    };
 
     return (
         <>
-            {/* Модальное окно */}
             <ModalAdd
                 isOpen={isAddOpen}
-                onClose={() => setIsAddOpen(false)}
-                onSave={handleSave}
+                onClose={closeAdd}
+                onSave={handleSaveAdd}
             />
-
-            {/* Сетка товаров + AddCard */}
+            {selectedProduct && (
+                <ModalUpdate
+                    isOpen={isUpdateOpen}
+                    onClose={closeUpdate}
+                    onSave={handleSaveUpdate}
+                    product={selectedProduct}
+                />
+            )}
             <div className="product-list">
-                {productsState.map(product => (
+                {products.map(p => (
                     <ProductCard
-                        key={product.article}
-                        product={product}
-                        onAddToCart={p => console.log('В корзину:', p)}
+                        key={p.id || p.article}
+                        product={p}
+                        onAddToCart={() => {}}
                         onDelete={onDelete}
+                        onUpdate={openUpdate}
                     />
                 ))}
-
-                {/* Вставляем AddCard после всех ProductCard */}
-                <AddCard onClick={() => setIsAddOpen(true)} />
+                <AddCard onClick={openAdd} />
             </div>
         </>
     );

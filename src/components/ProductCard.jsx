@@ -2,14 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, PencilLine } from 'lucide-react';
 import ModalProduct from './ModalProduct';
-import ModalAdd from './addProduct/ModalAdd';
 import ConfirmModal from './ConfirmModal';
-import '../styles/productCard.css';  // импорт стилей
+import '../styles/productCard.css';
 
 function pluralizeReview(count) {
     const mod10 = count % 10;
     const mod100 = count % 100;
-
     if (mod10 === 1 && mod100 !== 11) return `${count} отзыв`;
     if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${count} отзыва`;
     return `${count} отзывов`;
@@ -41,7 +39,6 @@ export default function ProductCard({ product = {}, onAddToCart, onDelete, onUpd
             }, 1000);
         } else {
             setCurrentImageIndex(0);
-            clearInterval(interval);
         }
         return () => clearInterval(interval);
     }, [isHovered, isAnyModalOpen, imageUrls.length]);
@@ -62,71 +59,64 @@ export default function ProductCard({ product = {}, onAddToCart, onDelete, onUpd
         }
     };
 
+    const openDetailModal = (e) => {
+        e.stopPropagation();
+        setIsHovered(false);
+        setShowDetailModal(true);
+    };
+
+    const openDeleteModal = (e) => {
+        e.stopPropagation();
+        setIsHovered(false);
+        setShowDeleteConfirm(true);
+    };
+
     return (
         <div
             className={`product-card ${isHovered ? 'hovered' : ''}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {/* Картинка — кликабельна */}
             {imageUrls.length > 0 && (
                 <img
-                    src={`${imageUrls[currentImageIndex]}`}
+                    src={imageUrls[currentImageIndex]}
                     alt="Product"
                     className="product-card-image"
+                    onClick={openDetailModal}
                     style={{ cursor: 'pointer' }}
-                    onClick={e => {
-                        e.stopPropagation();
-                        setShowDetailModal(true);
-                        setIsHovered(false);
-                    }}
-
                 />
             )}
 
-            {/* Блок: информация + иконки */}
             <div className="product-card-content">
-                {/* Текст — кликабелен */}
                 <div
                     className="product-card-text"
+                    onClick={openDetailModal}
                     style={{ cursor: 'pointer' }}
-                    onClick={e => {
-                        e.stopPropagation();
-                        setShowDetailModal(true);
-                        setIsHovered(false);
-                    }}
                 >
                     <h3 className="product-card-price">{price.toFixed(2)} BYN</h3>
                     <p className="product-card-brand-name">
                         <span>{brand}</span> | {name}
                     </p>
                     <div className="product-card-rating">
-                        <strong>{averageRating.toFixed(1)} ★</strong>{' '}
-                        <span>{pluralizeReview(reviewCount)}</span>
+                        <strong>{averageRating.toFixed(1)} ★</strong> <span>{pluralizeReview(reviewCount)}</span>
                     </div>
                 </div>
 
-                {/* Иконки — клики не всплывают */}
                 <div className="product-card-icons">
                     <button
                         onClick={e => {
                             e.stopPropagation();
-                            setShowEditModal(true);
-                            setIsHovered(false);
+                            onUpdate(product); // вызов функции из родителя
                         }}
                         className="icon-button"
                         aria-label="Изменить товар"
                         title="Изменить товар"
                     >
-                        <PencilLine size={24} />
+                        <PencilLine size={24}/>
                     </button>
 
                     <button
-                        onClick={e => {
-                            e.stopPropagation();
-                            setShowDeleteConfirm(true);
-                            setIsHovered(false);
-                        }}
+                        onClick={openDeleteModal}
                         className="icon-button"
                         aria-label="Удалить товар"
                         title="Удалить товар"
@@ -136,19 +126,13 @@ export default function ProductCard({ product = {}, onAddToCart, onDelete, onUpd
                 </div>
             </div>
 
-            {/* Кнопка "В корзину" — клик не всплывает */}
             <button
-                onClick={e => {
-                    e.stopPropagation();
-                    onAddToCart(product);
-                }}
+                onClick={e => { e.stopPropagation(); onAddToCart(product); }}
                 className="product-card-button full-width-wide"
-                aria-label="Добавить в корзину"
             >
                 В корзину
             </button>
 
-            {/* Детальный просмотр товара */}
             {showDetailModal && (
                 <ModalProduct
                     product={product}
@@ -158,7 +142,6 @@ export default function ProductCard({ product = {}, onAddToCart, onDelete, onUpd
                 />
             )}
 
-            {/* Подтверждение удаления */}
             {showDeleteConfirm && (
                 <ConfirmModal
                     isOpen={showDeleteConfirm}
@@ -168,18 +151,7 @@ export default function ProductCard({ product = {}, onAddToCart, onDelete, onUpd
                 />
             )}
 
-            {/* Модалка редактирования */}
-            {showEditModal && (
-                <ModalAdd
-                    isOpen={showEditModal}
-                    onClose={() => setShowEditModal(false)}
-                    onSave={updated => {
-                        onUpdate(updated);
-                        setShowEditModal(false);
-                    }}
-                    initialData={product}
-                />
-            )}
+
         </div>
     );
 }
